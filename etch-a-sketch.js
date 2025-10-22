@@ -1,6 +1,8 @@
 const container = document.querySelector('.divs');
 const changeBtn = document.querySelector('.change');
-let divs;
+let divs = 0;
+
+getPixelAmount();
 
 function getPixelAmount() {
     let pixelsRow = prompt('How many pixels do you want to have? (Max: 100)');
@@ -17,8 +19,6 @@ function getPixelAmount() {
             newDiv = document.createElement('div');
             newDiv.classList.add('newDiv');
             newDiv.style.flexBasis = `${100 / pixelsRow}%`;
-            newDiv.style.backgroundColor  ='pink';
-
             container.appendChild(newDiv);
         }
     }
@@ -35,3 +35,14 @@ changeBtn.addEventListener('click', () => {
         getPixelAmount();
     }
 });
+
+function drawDefault() {
+    divs.forEach(e => {
+        e.addEventListener('mouseover', (event) => {
+            let targetDiv = event.target;
+            targetDiv.style.backgroundColor = 'black';
+        });
+    });
+}
+
+drawDefault();
