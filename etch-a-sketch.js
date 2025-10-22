@@ -1,17 +1,25 @@
 const container = document.querySelector('.divs');
 const changeBtn = document.querySelector('.change');
+const resetBtn = document.querySelector('.clear-btn');
 let divs = 0;
+let pixelsRow;
+let pixels;
+let newDiv;
 
 getPixelAmount();
 
 function getPixelAmount() {
-    let pixelsRow = prompt('How many pixels do you want to have? (Max: 100)');
+    pixelsRow = prompt('How many pixels do you want to have? (Max: 100)');
+    if (!pixelsRow) {
+        return;
+    }
+    
     pixelsRow = Number(pixelsRow);
-    let pixels = pixelsRow * pixelsRow;
-    let newDiv;
-
+    pixels = pixelsRow * pixelsRow;
+    
     if (!Number.isInteger(pixels) || pixels <= 0) {
         alert('ERROR! You need to input a number');
+        return;
     } else if (pixelsRow > 100) {
         pixels = 100;
     } else {
@@ -31,18 +39,28 @@ changeBtn.addEventListener('click', () => {
             element.remove();
         });
         getPixelAmount();
+        drawDefault();
     } else {
         getPixelAmount();
+        drawDefault();
     }
 });
 
 function drawDefault() {
     divs.forEach(e => {
-        e.addEventListener('mouseover', (event) => {
-            let targetDiv = event.target;
-            targetDiv.style.backgroundColor = 'black';
-        });
+            e.addEventListener('mouseover', (event) => {
+                let targetDiv = event.target;
+                targetDiv.style.backgroundColor = 'black';
+            });            
     });
 }
+
+function resetDivs() {
+    divs.forEach((e) => {
+        e.style.backgroundColor = 'white';
+    });
+}
+
+resetBtn.addEventListener('click', resetDivs);
 
 drawDefault();
