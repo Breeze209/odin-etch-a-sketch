@@ -8,6 +8,10 @@ let pixelsRow;
 let pixels;
 let newDiv;
 let color;
+let randomColor;
+let col1;
+let col2;
+let col3;
 
 getPixelAmount();
 
@@ -18,21 +22,23 @@ function getPixelAmount() {
     }
     
     pixelsRow = Number(pixelsRow);
-    pixels = pixelsRow * pixelsRow;
     
-    if (!Number.isInteger(pixels) || pixels <= 0) {
+    if (!Number.isInteger(pixelsRow) || pixelsRow <= 0) {
         alert('ERROR! You need to input a number');
         return;
     } else if (pixelsRow > 100) {
-        pixels = 100;
-    } else {
-        for (let i = 1; i <= pixels; i++) {
-            newDiv = document.createElement('div');
-            newDiv.classList.add('newDiv');
-            newDiv.style.flexBasis = `${100 / pixelsRow}%`;
-            container.appendChild(newDiv);
-        }
+        pixelsRow = 100;
     }
+
+    pixels = pixelsRow * pixelsRow;
+
+    for (let i = 1; i <= pixels; i++) {
+        newDiv = document.createElement('div');
+        newDiv.classList.add('newDiv');
+        newDiv.style.flexBasis = `${100 / pixelsRow}%`;
+        container.appendChild(newDiv);
+    }
+    
     divs = document.querySelectorAll('.newDiv');
 }
 
@@ -48,6 +54,13 @@ changeBtn.addEventListener('click', () => {
         drawDefault();
     }
 });
+
+function getRandomColor() {
+    col1 = Math.floor(Math.random() * 256);
+    col2 = Math.floor(Math.random() * 256);
+    col3 = Math.floor(Math.random() * 256);
+    return randomColor = `rgb(${col1}, ${col2}, ${col3})`;
+}
 
 function drawDefault() {
     divs.forEach(e => {
@@ -68,6 +81,17 @@ function drawChosenColor() {
             e.addEventListener('mouseover', (event) => {
                 let targetDiv = event.target;
                 targetDiv.style.backgroundColor = color;
+            });            
+    });
+}
+
+function drawRandomColor() {
+    getRandomColor();
+    divs.forEach(e => {
+            e.addEventListener('mouseover', (event) => {
+                let targetDiv = event.target;
+                targetDiv.style.backgroundColor = randomColor;
+                getRandomColor();
             });            
     });
 }
