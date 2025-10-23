@@ -1,10 +1,13 @@
 const container = document.querySelector('.divs');
 const changeBtn = document.querySelector('.change');
 const resetBtn = document.querySelector('.clear-btn');
+const chooseBtn = document.querySelector('.choose-btn');
+const randomBtn = document.querySelector('.random-btn');
 let divs = 0;
 let pixelsRow;
 let pixels;
 let newDiv;
+let color;
 
 getPixelAmount();
 
@@ -51,6 +54,20 @@ function drawDefault() {
             e.addEventListener('mouseover', (event) => {
                 let targetDiv = event.target;
                 targetDiv.style.backgroundColor = 'black';
+            });            
+    });
+}
+
+chooseBtn.addEventListener('click', () => {
+    color = prompt('What color do you want to draw in?');
+    color.toLowerCase();
+});
+
+function drawChosenColor() {
+    divs.forEach(e => {
+            e.addEventListener('mouseover', (event) => {
+                let targetDiv = event.target;
+                targetDiv.style.backgroundColor = color;
             });            
     });
 }
