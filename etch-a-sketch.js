@@ -3,6 +3,8 @@ const changeBtn = document.querySelector('.change');
 const resetBtn = document.querySelector('.clear-btn');
 const chooseBtn = document.querySelector('.choose-btn');
 const randomBtn = document.querySelector('.random-btn');
+const defaultBtn = document.querySelector('.default-btn');
+const darkerBtn = document.querySelector('.darkening-btn');
 let divs = 0;
 let pixelsRow;
 let pixels;
@@ -12,11 +14,13 @@ let randomColor;
 let col1;
 let col2;
 let col3;
+let modus;
+let darker = 'deacti';
 
 getPixelAmount();
 
 function getPixelAmount() {
-    pixelsRow = prompt('How many pixels do you want to have? (Max: 100)');
+    pixelsRow = prompt('How many pixels per row do you want to have? (Max: 100)');
     if (!pixelsRow) {
         return;
     }
@@ -36,6 +40,7 @@ function getPixelAmount() {
         newDiv = document.createElement('div');
         newDiv.classList.add('newDiv');
         newDiv.style.flexBasis = `${100 / pixelsRow}%`;
+        newDiv.style.backgroundColor = 'white';
         container.appendChild(newDiv);
     }
     
@@ -48,10 +53,10 @@ changeBtn.addEventListener('click', () => {
             element.remove();
         });
         getPixelAmount();
-        drawDefault();
+        giveMode();
     } else {
         getPixelAmount();
-        drawDefault();
+        giveMode();
     }
 });
 
@@ -67,21 +72,26 @@ function drawDefault() {
             e.addEventListener('mouseover', (event) => {
                 let targetDiv = event.target;
                 targetDiv.style.backgroundColor = 'black';
+                targetDiv.style.opacity = '1';
             });            
     });
 }
 
 chooseBtn.addEventListener('click', () => {
     color = prompt('What color do you want to draw in?');
-    color.toLowerCase();
+    color = color.toLowerCase();
+    console.log(color);
+    modus = 'choose';
+    giveMode();
 });
 
 function drawChosenColor() {
     divs.forEach(e => {
-            e.addEventListener('mouseover', (event) => {
-                let targetDiv = event.target;
-                targetDiv.style.backgroundColor = color;
-            });            
+        e.addEventListener('mouseover', (event) => {
+            let targetDiv = event.target;
+            targetDiv.style.backgroundColor = `${color}`;
+            targetDiv.style.opacity = '1';
+        });            
     });
 }
 
@@ -91,7 +101,31 @@ function drawRandomColor() {
             e.addEventListener('mouseover', (event) => {
                 let targetDiv = event.target;
                 targetDiv.style.backgroundColor = randomColor;
+                targetDiv.style.opacity = '1';
                 getRandomColor();
+            });            
+    });
+}
+
+function drawDarker() {
+    darker = 'acti';
+    if (divs) {
+        divs.forEach(element => {
+            element.remove();
+        });
+        getPixelAmount();
+    } else {
+        getPixelAmount();
+    }
+    divs.forEach(e => {
+            e.addEventListener('mouseover', (event) => {
+                let targetDiv = event.target;
+                if (targetDiv.style.backgroundColor == 'white') {
+                    targetDiv.style.backgroundColor = 'black';
+                    targetDiv.style.opacity = '0.1';
+                } else {
+                    targetDiv.style.opacity = `${Number(targetDiv.style.opacity) + 0.1}`;
+                }
             });            
     });
 }
@@ -104,4 +138,62 @@ function resetDivs() {
 
 resetBtn.addEventListener('click', resetDivs);
 
-drawDefault();
+defaultBtn.addEventListener('click', () => {
+    modus = 'default';
+    giveMode();
+});
+
+randomBtn.addEventListener('click', () => {
+    modus = 'random';
+    giveMode();
+});
+
+darkerBtn.addEventListener('click', () => {
+    modus = 'darker';
+    giveMode();
+});
+
+function giveMode() {
+    switch (modus) {
+        case 'default':
+            checkActi();
+            drawDefault();
+            console.log(1);
+            break;
+
+        case 'random':
+            checkActi();
+            drawRandomColor();
+            console.log(2);
+            break;
+
+        case 'darker':
+            drawDarker();
+            console.log(3);
+            break;
+
+        case 'choose':
+            checkActi();
+            drawChosenColor();
+            console.log(4);
+            break;
+
+        default:
+            checkActi();
+            drawDefault();
+            console.log(5);
+    }
+}
+
+function checkActi() {
+    if (darker === 'acti') {
+        if (divs) {
+            divs.forEach(div => {
+                div.style.backgroundColor = 'white';
+            });
+            darker = 'deacti';
+        }
+    }
+}
+
+giveMode();
